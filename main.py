@@ -20,7 +20,7 @@
 import os
 from typing import Any
 import discord 
-from discord.ext.commands import Bot, Context, command # type: ignore
+from discord.ext.commands import Bot, Context, command 
 from discord.ext import commands
 from discord import Interaction, Embed, Color, app_commands
 from dotenv import load_dotenv
@@ -57,8 +57,8 @@ class MyBot(Bot):
             await self.load_extension(extensions[cog])
         await self.db.executequeue()
         await self.tree.sync()
+
     
-        
     async def on_command_error(self, ctx: Context[Any], error: commands.CommandError):
         response_embed = None
         if isinstance(error, commands.CommandOnCooldown):
@@ -225,7 +225,7 @@ class MyBot(Bot):
         elif isinstance(error, app_commands.MissingAnyRole):
             response_embed = Embed(
                 title="Error",
-                description=f"You Are Missing {''.join(error.missing_roles)} Roles", # type: ignore
+                description=f"You Are Missing {''.join(error.missing_roles)} Roles", 
                 color=Color.red(),
             )
         elif isinstance(error, app_commands.MissingRole):
@@ -266,6 +266,8 @@ class MyBot(Bot):
                 await interaction.followup.send(embed=response_embed, ephemeral=True)
         
 TOKEN = os.getenv("TOKEN")
+if not TOKEN:
+    raise ValueError("Token Not Found")
 bot = MyBot()
 
 @bot.command()
@@ -275,7 +277,7 @@ async def sync(ctx: Context[Any]):
     await ctx.send("Synced")
 
 try:    
-    bot.run(TOKEN) # type: ignore
+    bot.run(TOKEN) 
 except discord.LoginFailure:
     print("Invalid Token")
 except discord.HTTPException:

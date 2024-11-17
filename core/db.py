@@ -1,16 +1,21 @@
 from typing import Any
-import asyncsqlite
+import asqlite
 
 
 class DB:
+    def __init__(self, path: str = "main.db"):
+        self.path = path
+    
     async def init(self):
         """
         Initialize the database connection
         """
-        self.conn = await asyncsqlite.connect("main.db")
+        self.conn = await asqlite.connect(self.path)
         self.cursor = await self.conn.cursor()
         self.cursorqueue: list[str] = []
         await self.commit()
+
+
 
     async def close(self):
         """
